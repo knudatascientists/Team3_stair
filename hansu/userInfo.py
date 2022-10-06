@@ -1,6 +1,7 @@
 from geopy.geocoders import Nominatim
 
 class UserInfo :
+
     def __init__(self, address, crd):
         self.address = address
         self.loc = crd
@@ -21,6 +22,15 @@ class UserInfo :
         return cls(address, crd)
 
     def get_user_info(self):
-        print('사용자 현제 위치 :')
+        print('사용자 현제 위치 :', self.address)
+        print(f'위도 : {self.loc["lat"]}, 경도 : {self.loc["lng"]}')
+
+
+
+
+
+# user1 = UserInfo.geocoding('대구광역시 산격동 글로벌플라자')
+# user1.get_user_info()
+        
 
 
