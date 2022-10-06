@@ -7,9 +7,8 @@ from userInfo import UserInfo
 class Station:
     def __init__(self, use_DB = True):
         if use_DB:
-            self.seoul_loc = self.load_DB('seoul_loc')
-            self.구분_명_주소 = self.load_DB('구분_명_주소')
-            self.년도별_valuecounts = self.load_DB('년도별_valuecounts')
+            # self.seoul_loc = self.load_DB('seoul_loc')
+            pass
         else:
             self.seoul_loc = self.load_csv('seoul_loc')
             self.구분_명_주소 = self.load_csv('구분_명_주소')
@@ -26,6 +25,16 @@ class Station:
         cur.close()
         conn.close()
         return tabel
+
+    def get_tabel_names(self):
+        conn = pymysql.connect(host=host_IP, user =user_ID, password =password, db =db_name, charset =charset)
+        cur = conn.cursor()
+        cur.execute(f'SHOW TABLES IN {db_name}')
+        rows = cur.fetchall()
+        tableList = [tb[0] for tb in rows]
+        cur.close()
+        conn.close()
+        return tableList
 
     def load_csv(self, tabelName):
         tabel = pd.read_csv(data_path + tabelName+'.csv')
