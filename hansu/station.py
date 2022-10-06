@@ -15,18 +15,18 @@ class Station:
             self.년도별_valuecounts = self.load_csv('년도별_valuecounts')
 
 
-    def load_DB(self, tabelName):
+    def load_DB(self, tableName):
         conn = pymysql.connect(host=host_IP, user =user_ID, password =password, db =db_name, charset =charset)
         cur = conn.cursor()
-        sql = f"SELECT * FROM {tabelName}"
+        sql = f"SELECT * FROM {tableName}"
         cur.execute(sql)
         rows = cur.fetchall()
-        tabel = pd.DataFrame(rows, columns = [t[0] for t in cur.description])
+        table = pd.DataFrame(rows, columns = [t[0] for t in cur.description])
         cur.close()
         conn.close()
-        return tabel
+        return table
 
-    def get_tabel_names(self):
+    def get_table_names(self):
         conn = pymysql.connect(host=host_IP, user =user_ID, password =password, db =db_name, charset =charset)
         cur = conn.cursor()
         cur.execute(f'SHOW TABLES IN {db_name}')
@@ -36,9 +36,9 @@ class Station:
         conn.close()
         return tableList
 
-    def load_csv(self, tabelName):
-        tabel = pd.read_csv(data_path + tabelName+'.csv')
-        return tabel
+    def load_csv(self, tableName):
+        table = pd.read_csv(data_path + tableName+'.csv')
+        return table
 
     # 기능: 두 지점 사이 거리 계산(유클리드)
     # 입력: 위경도1, 위경도2
