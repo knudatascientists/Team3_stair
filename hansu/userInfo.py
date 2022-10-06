@@ -22,7 +22,7 @@ class UserInfo :
         return cls(address, crd)
 
     def get_user_info(self):
-        print('사용자 현제 위치 :', self.address)
+        print('사용자 현재 위치 :', self.address)
         print(f'위도 : {self.loc["lat"]}, 경도 : {self.loc["lng"]}')
 
 # user1 = UserInfo.geocoding('대구광역시 산격동 글로벌플라자')
