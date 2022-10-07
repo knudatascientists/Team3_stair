@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import pymysql
 from settings import *
-from userInfo import UserInfo
+from userInfo_gy import UserInfo
 from haversine import haversine
 
 # SQL 연결 클래스
@@ -106,7 +106,7 @@ class Station_gy:
             else:
                 result_df.loc[i,'speed']=self.speed_df.loc[i,'speed']
         
-        result_df.sort_values('distant distance(km)')
+        result_df=result_df.sort_values('distant distance(km)',ascending=False)
         return result_df
 
     # 기능: 사용자 위치에서 각 충전소까지 거리 데이터에 추가
