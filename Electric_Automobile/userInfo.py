@@ -21,8 +21,8 @@ class UserInfo :
 
     @classmethod
     def geocoding(cls, address):
-        geolocoder = Nominatim(user_agent = 'South Korea', timeout= 200)
-        geo = geolocoder.geocode(address)
+        cls.geolocoder = Nominatim(user_agent = 'South Korea', timeout= 200)
+        geo = cls.geolocoder.geocode(address)
         crd = {"lat": str(geo.latitude), "lng": str(geo.longitude)}
         return cls(address, crd)
 
@@ -37,6 +37,7 @@ class UserInfo :
     def get_user_info(self):
         print('사용자 현재 위치 :', self.address)
         print(f'위도 : {self.loc["lat"]}, 경도 : {self.loc["lng"]}')
+        return f"사용자 현재 위치 : {self.address} \n위도 : {self.loc['lat']}, 경도 : {self.loc['lng']}"
 
 # user1 = UserInfo.geocoding('대구광역시 산격동 글로벌플라자')
 # user1.get_user_info()
