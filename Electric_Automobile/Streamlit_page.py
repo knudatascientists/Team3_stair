@@ -26,7 +26,7 @@ df = service.load_DB('seoul_loc')
 df.rename(columns = {'LAT':'lat', 'LNG':'lon'}, inplace = True)
 
 st.map(df[['lat','lon']])
-st_df = st.dataframe(df,width=300,height=300)
+st_df = st.dataframe(df[['lat','lon']],width=300,height=300)
 
 st.pydeck_chart(pdk.Deck(
     map_style=None,
