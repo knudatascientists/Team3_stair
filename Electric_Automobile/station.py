@@ -15,18 +15,18 @@ class Station:
             self.년도별_valuecounts = self.load_csv('년도별_valuecounts')
 
 
-    def load_DB(self, tabelName):
+    def load_DB(self, tableName):
         conn = pymysql.connect(host=host_IP, user =user_ID, password =password, db =db_name, charset =charset)
         cur = conn.cursor()
-        sql = f"SELECT * FROM {tabelName}"
+        sql = f"SELECT * FROM {tableName}"
         cur.execute(sql)
         rows = cur.fetchall()
-        tabel = pd.DataFrame(rows, columns = [t[0] for t in cur.description])
+        table = pd.DataFrame(rows, columns = [t[0] for t in cur.description])
         cur.close()
         conn.close()
-        return tabel
+        return table
 
-    def get_tabel_names(self):
+    def get_table_names(self):
         conn = pymysql.connect(host=host_IP, user =user_ID, password =password, db =db_name, charset =charset)
         cur = conn.cursor()
         cur.execute(f'SHOW TABLES IN {db_name}')
@@ -36,9 +36,9 @@ class Station:
         conn.close()
         return tableList
 
-    def load_csv(self, tabelName):
-        tabel = pd.read_csv(data_path + tabelName+'.csv')
-        return tabel
+    def load_csv(self, tableName):
+        table = pd.read_csv(data_path + tableName+'.csv')
+        return table
 
     # 기능: 두 지점 사이 거리 계산(유클리드)
     # 입력: 위경도1, 위경도2
@@ -64,7 +64,6 @@ class Station:
     def find_near_stations(self, length):
         pass
 
-    #
     # 기능: 주소상의 구에 포함되는 자료를 필터링
     # 입력: user_add
     # 출력: 없음
@@ -72,6 +71,9 @@ class Station:
         # self.filter_data =
         pass
 
+    # 기능: 필터링 된 자료에서 등록정보, 충전소 정보 반환
+    # 입력: 없음
+    # 출력: 차량 등록정보, DataFrame(station_name, station_add, station_loc)
     def get_local_cars(self):
         pass
 
