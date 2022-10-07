@@ -6,10 +6,23 @@ class UserInfo :
         self.address = address
         self.loc = crd
 
+    def set_add(self, address):
+        geo = UserInfo.geolocoder.geocode(address)
+        self.address = address
+        crd = {"lat": str(geo.latitude), "lng": str(geo.longitude)}
+        self.loc = crd
+
+    def set_loc(self, lat_lng_str):
+        address = UserInfo.geolocoder.reverse(lat_lng_str)
+        geo = lat_lng_str.split(', ')
+        crd = {"lat": str(geo[0]), "lng": str(geo[1])}
+        self.address = address
+        self.loc = crd
+
     @classmethod
     def geocoding(cls, address):
-        cls.geolocoder = Nominatim(user_agent = 'South Korea', timeout= 200)
-        geo = cls.geolocoder.geocode(address)
+        geolocoder = Nominatim(user_agent = 'South Korea', timeout= 200)
+        geo = geolocoder.geocode(address)
         crd = {"lat": str(geo.latitude), "lng": str(geo.longitude)}
         return cls(address, crd)
 
