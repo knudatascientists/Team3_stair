@@ -64,7 +64,6 @@ class Station:
     def find_near_stations(self, length):
         pass
 
-    #
     # 기능: 주소상의 구에 포함되는 자료를 필터링
     # 입력: user_add
     # 출력: 없음
@@ -72,6 +71,9 @@ class Station:
         # self.filter_data =
         pass
 
+    # 기능: 필터링 된 자료에서 등록정보, 충전소 정보 반환
+    # 입력: 없음
+    # 출력: 차량 등록정보, DataFrame(station_name, station_add, station_loc)
     def get_local_cars(self):
         pass
 
