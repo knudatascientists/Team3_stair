@@ -8,13 +8,11 @@ import pydeck as pdk
 import pandas as pd
 import numpy as np
 
-
 service = Station()
 user = UserInfo.geocoding(default_add)
-
 st.title('Electric Automobile Station')
 
-# st.subheader('현재 위치')
+# 사용자 위치정보 입력창
 add = st.text_input(label = '현재 위치(서울시 00구 ...)', value = default_add)
 try:
     user.set_add(add)
@@ -22,18 +20,15 @@ try:
 except:
     st.text('주소 입력 오류!')
 
+# 구 내의 등록 차량 정보 출력
 service.make_res_car_df(add, user)
 t, gu_res_car_cnt = service.get_gu_info(user)
 st.text(t)
 st.dataframe(gu_res_car_cnt)
-
-# st.subheader(f"{user.distict}내의 전기차량 등록수 : {service.get_local_cars()}")
-
 service.make_station_df((float(user.loc['lat']),float(user.loc['lng'])))
 df = service.result_df
 
-# st.map(df[['lat', 'lon']])
-
+# 위치 시각화
 st.pydeck_chart(pdk.Deck(
     map_style=None,
     initial_view_state=pdk.ViewState(
@@ -43,6 +38,7 @@ st.pydeck_chart(pdk.Deck(
 
     ),
     layers=[
+        # 사용자 위치
         pdk.Layer(
            'HexagonLayer',
            data=pd.DataFrame({'lat':[float(user.loc['lat'])],'lon':[float(user.loc['lng'])]}),
@@ -54,6 +50,7 @@ st.pydeck_chart(pdk.Deck(
            pickable=True,
            extruded=True,
         ),       
+        # 가장 가까운 충전소
         pdk.Layer(
             'ScatterplotLayer',
             data=service.get_closest_st(),
@@ -61,6 +58,7 @@ st.pydeck_chart(pdk.Deck(
             get_color='[150, 30, 30, 160]',
             get_radius=25,
         ),
+        # 전체 충전소
         pdk.Layer(
             'ScatterplotLayer',
             data=df.loc[1:,['lat', 'lon']],
@@ -70,5 +68,7 @@ st.pydeck_chart(pdk.Deck(
         ),
     ],
 ))
+
+# 충전소 정보 출력
 st.text(f'{service.length}km 내의 충전소 수 : {len(df)} 개')
 st_df = st.dataframe(df,width=800,height=400)

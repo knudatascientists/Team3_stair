@@ -16,8 +16,6 @@ class Station:
             self.seoul_loc_df=self.load_DB('seoul_loc')
             self.speed_df=self.load_DB('speed')
             
-
-
     def load_DB(self, tableName):
         conn = pymysql.connect(host=host_IP, user =user_ID, password =password, db =db_name, charset =charset)
         cur = conn.cursor()
@@ -43,10 +41,7 @@ class Station:
         table = pd.read_csv(data_path + tableName+'.csv')
         return table
 
-
-    # SQL에 저장된 테이블의 전체를 볼 수 있음
-
-# 기능: 거리에 따른
+    # 기능: 거리에 따른
     # 입력: 유저위치정보
     # 출력: 충전소 정보 데이터 프레임
     def make_station_df(self,user_loc):
@@ -89,7 +84,6 @@ class Station:
         closest_st = self.result_df.loc[[0],['lat', 'lon']]
         return closest_st
 
-
     # 기능: 서울시 구별 등록차량 정보 필터링
     # 입력: 사용자 위치 정보
     def make_res_car_df(self,address, user):
@@ -107,7 +101,7 @@ class Station:
         gu_res_car_cnt.index=['count']        
         return gu_res_car_cnt
 
-
+    # 사용자의 위치정보 기반 구 내의 정보 문자열 반환
     def get_gu_info(self, user):
         t = f"{user.gu} 내의 전기차량 등록수 : {len(self.res_car_df)} 개"
         return t, self.gu_res_car_cnt
