@@ -4,6 +4,7 @@ class UserInfo :
 
     def __init__(self, address, crd):
         self.address = address
+        self.gu = self.address.split(' ')[1]
         self.loc = crd
 
     def set_add(self, address):
@@ -11,6 +12,8 @@ class UserInfo :
         self.address = address
         crd = {"lat": str(geo.latitude), "lng": str(geo.longitude)}
         self.loc = crd
+        self.gu = self.address.split(' ')[1]
+        
 
     def set_loc(self, lat_lng_str):
         address = UserInfo.geolocoder.reverse(lat_lng_str)
@@ -18,6 +21,8 @@ class UserInfo :
         crd = {"lat": str(geo[0]), "lng": str(geo[1])}
         self.address = address
         self.loc = crd
+        self.gu = self.address.split(' ')[1]
+        
 
     @classmethod
     def geocoding(cls, address):
