@@ -1,11 +1,10 @@
 import pandas as pd
-import numpy as np
 import pymysql
 from settings import *
-from userInfo import UserInfo
 from haversine import haversine
 
 class Station:
+    # 생성자
     def __init__(self, use_DB = True):
         self.res_car_df = pd.DataFrame()
         self.length = 0
@@ -15,7 +14,8 @@ class Station:
             self.charge_address_df=self.load_DB('charge_address')
             self.seoul_loc_df=self.load_DB('seoul_loc')
             self.speed_df=self.load_DB('speed')
-            
+    
+    # DB에 있는 데이터 불러오기 함수
     def load_DB(self, tableName):
         conn = pymysql.connect(host=host_IP, user =user_ID, password =password, db =db_name, charset =charset)
         cur = conn.cursor()
@@ -27,6 +27,7 @@ class Station:
         conn.close()
         return table
 
+    # DB에서 테이블 이름만 불러와주는 함수
     def get_table_names(self):
         conn = pymysql.connect(host=host_IP, user =user_ID, password =password, db =db_name, charset =charset)
         cur = conn.cursor()
@@ -37,6 +38,7 @@ class Station:
         conn.close()
         return tableList
 
+    # 폴더 내에 있는 파일을 불러오는 함수
     def load_csv(self, tableName):
         table = pd.read_csv(data_path + tableName+'.csv')
         return table
@@ -45,7 +47,6 @@ class Station:
     # 입력: 유저위치정보
     # 출력: 충전소 정보 데이터 프레임
     def make_station_df(self,user_loc):
-
         # 떨어진 거리의 새로운 열 만들기
         for k in [1,3,5]:
             for i in range(len(self.seoul_loc_df)):

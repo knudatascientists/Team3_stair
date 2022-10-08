@@ -1,12 +1,10 @@
-from cProfile import label
-from turtle import color
+# 실행코드
 from userInfo import UserInfo
 from station import Station
 from settings import *
 import streamlit as st
 import pydeck as pdk
 import pandas as pd
-import numpy as np
 
 service = Station()
 user = UserInfo.geocoding(default_add)
