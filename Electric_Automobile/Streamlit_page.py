@@ -29,8 +29,8 @@ st.dataframe(gu_res_car_cnt)
 
 # st.subheader(f"{user.distict}내의 전기차량 등록수 : {service.get_local_cars()}")
 
-
-df = service.station_df((float(user.loc['lat']),float(user.loc['lng'])))
+service.make_station_df((float(user.loc['lat']),float(user.loc['lng'])))
+df = service.result_df
 df.rename(columns = {'LAT':'lat', 'LNG':'lon'}, inplace = True)
 # st.map(df[['lat', 'lon']])
 
@@ -70,4 +70,5 @@ st.pydeck_chart(pdk.Deck(
         ),
     ],
 ))
-st_df = st.dataframe(df,width=900,height=300)
+st.text(f'{service.length}km내 충전소 수 : {len(df)}')
+st_df = st.dataframe(df,width=800,height=400)

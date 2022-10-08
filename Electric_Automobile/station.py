@@ -8,6 +8,7 @@ from haversine import haversine
 class Station:
     def __init__(self, use_DB = True):
         self.res_car_df = pd.DataFrame()
+        self.length = 0
         if use_DB:
             self.car_register_df=self.load_DB('car_register')
             self.count_df=self.load_DB('count')
@@ -48,7 +49,8 @@ class Station:
 # 기능: 거리에 따른
     # 입력: 유저위치정보
     # 출력: 충전소 정보 데이터 프레임
-    def station_df(self,user_loc):
+    def make_station_df(self,user_loc):
+
         # 떨어진 거리의 새로운 열 만들기
         for k in [1,3,5]:
             for i in range(len(self.seoul_loc_df)):
@@ -64,6 +66,7 @@ class Station:
                 # print(f"다른곳으로 이동 후 다시 정보를 입력해주세요.")
                 return pd.DataFrame(columns = ['station', 'LNG', 'LAT', 'distant', 'distance(km)', 'address', 'speed'])
             else:
+                self.length = k
                 break
         
         # 주소데이터를 열로 만들기
@@ -76,8 +79,8 @@ class Station:
             else:
                 result_df.loc[i,'speed']=self.speed_df.loc[i,'speed']
         
-        result_df=result_df.sort_values('distant distance(km)',ascending=True).reset_index(drop = True)
-        return result_df
+        self.result_df=result_df.sort_values('distant distance(km)',ascending=True).reset_index(drop = True)
+
 
     # 기능: 서울시 구별 등록차량 정보 필터링
     # 입력: 사용자 위치 정보
