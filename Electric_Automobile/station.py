@@ -81,6 +81,12 @@ class Station:
         
         self.result_df=result_df.sort_values('distant distance(km)',ascending=True).reset_index(drop = True)
 
+    # 기능: 가장 가까운 위치의 충전소 위치를 반환
+    # 입력: 없음
+    # 출력: DataFrame
+    def get_closest_st(self):
+        return self.result_df.loc[[0],['LAT', 'LNG']]
+
 
     # 기능: 서울시 구별 등록차량 정보 필터링
     # 입력: 사용자 위치 정보
@@ -103,3 +109,4 @@ class Station:
     def get_gu_info(self, user):
         t = f"{user.gu}내의 전기차량 등록수 : {len(self.res_car_df)}"
         return t, self.gu_res_car_cnt
+

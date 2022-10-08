@@ -56,7 +56,7 @@ st.pydeck_chart(pdk.Deck(
         ),       
         pdk.Layer(
             'ScatterplotLayer',
-            data=df.loc[[0],['lat', 'lon']],
+            data=service.get_closest_st().rename(columns = {'LAT':'lat', 'LNG':'lon'}),
             get_position='[lon, lat]',
             get_color='[150, 30, 30, 160]',
             get_radius=25,
