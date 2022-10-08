@@ -1,3 +1,4 @@
+from cProfile import label
 from turtle import color
 from userInfo import UserInfo
 from station import Station
@@ -13,47 +14,56 @@ user = UserInfo.geocoding(default_add)
 
 st.title('Electric Automobile Station')
 
-st.subheader('현재 위치')
-add = st.text_input(label = '', value = default_add)
+# st.subheader('현재 위치')
+add = st.text_input(label = '현재 위치(서울시 00구 ...', value = default_add)
 user.set_add(add)
 st.text(user.get_user_info())
+service.make_res_car_df(add, user)
+t, gu_res_car_cnt = service.get_gu_info(user)
+st.text(t)
+st.dataframe(gu_res_car_cnt)
 
 # st.subheader(f"{user.distict}내의 전기차량 등록수 : {service.get_local_cars()}")
 
-# df = service.find_near_stations(bound_length)
-# df = pd.DataFrame({'lat':[float(user.loc['lat'])], 'lon':[float(user.loc['lng'])]})
-df = service.load_DB('seoul_loc')
-df.rename(columns = {'LAT':'lat', 'LNG':'lon'}, inplace = True)
 
-st.map(df[['lat','lon']])
-st_df = st.dataframe(df[['lat','lon']],width=300,height=300)
+df = service.station_df((float(user.loc['lat']),float(user.loc['lng'])))
+df.rename(columns = {'LAT':'lat', 'LNG':'lon'}, inplace = True)
+# st.map(df[['lat', 'lon']])
 
 st.pydeck_chart(pdk.Deck(
     map_style=None,
     initial_view_state=pdk.ViewState(
         latitude=float(user.loc['lat']),
         longitude=float(user.loc['lng']),
-        zoom=15,
-        # pitch=50,
+        zoom=14,
+
     ),
     layers=[
         pdk.Layer(
-           'closest',
-           data=df.iloc[[0],:],
+           'HexagonLayer',
+           data=pd.DataFrame({'lat':[float(user.loc['lat'])],'lon':[float(user.loc['lng'])]}),
            get_position='[lon, lat]',
-           get_color='[150, 30, 30, 160]',
-           radius=70,
-        #    elevation_scale=4,
-        #    elevation_range=[0, 1000],
-        #    pickable=True,
-        #    extruded=True,
+           get_color='[200, 30, 30, 160]',
+           radius=30,
+           elevation_scale=4,
+           elevation_range=[0, 1000],
+           pickable=True,
+           extruded=True,
+        ),       
+        pdk.Layer(
+            'ScatterplotLayer',
+            data=df.loc[[0],['lat', 'lon']],
+            get_position='[lon, lat]',
+            get_color='[150, 30, 30, 160]',
+            get_radius=25,
         ),
         pdk.Layer(
-            'all',
-            data=df,
+            'ScatterplotLayer',
+            data=df.loc[1:,['lat', 'lon']],
             get_position='[lon, lat]',
             get_color='[30, 30, 150, 160]',
-            get_radius=70,
+            get_radius=20,
         ),
     ],
 ))
+st_df = st.dataframe(df,width=900,height=300)
