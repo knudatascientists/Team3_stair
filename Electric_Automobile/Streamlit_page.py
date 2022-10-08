@@ -15,9 +15,13 @@ user = UserInfo.geocoding(default_add)
 st.title('Electric Automobile Station')
 
 # st.subheader('현재 위치')
-add = st.text_input(label = '현재 위치(서울시 00구 ...', value = default_add)
-user.set_add(add)
-st.text(user.get_user_info())
+add = st.text_input(label = '현재 위치(서울시 00구 ...)', value = default_add)
+try:
+    user.set_add(add)
+    st.text(user.get_user_info())
+except:
+    st.text('주소 입력 오류!')
+
 service.make_res_car_df(add, user)
 t, gu_res_car_cnt = service.get_gu_info(user)
 st.text(t)
