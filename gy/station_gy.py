@@ -102,8 +102,9 @@ class Station_gy:
     # 입력: 해당 구의 데프
     # 출력: 차량 종류별
     def gu_res_car_cnt(self,re_car_data):
-        gu_res_car_df=pd.DataFrame(re_car_data.groupby('fuel').count()['dong'].reset_index()).sort_values('dong',ascending=False)
-        gu_res_car_df.columns=['fuel','cnt']
+        gu_res_car_df=pd.DataFrame(re_car_data.groupby('fuel').count()['dong'])
+        gu_res_car_df=gu_res_car_df.T
+        gu_res_car_df.index=['count']
         
         return gu_res_car_df
 
