@@ -91,12 +91,12 @@ class Station:
     # 입력: 해당 구의 등록정보
     # 출력: 차량 종류별 등록정보
     def get_res_car_cnt(self):
-        gu_res_car_df=pd.DataFrame(self.res_car_df.groupby('fuel').count()['dong'].reset_index()).sort_values('dong',ascending=False)
-        gu_res_car_df.columns=['fuel','cnt']
-        
-        return gu_res_car_df
+        gu_res_car_cnt=pd.DataFrame(self.res_car_df.groupby('fuel').count()['dong'])
+        gu_res_car_cnt=gu_res_car_cnt.T
+        gu_res_car_cnt.index=['count']        
+        return gu_res_car_cnt
 
 
     def get_gu_info(self, user):
-        t = f"{user.gu}내의 전기차량 등록수 : {len(self.gu_res_car_cnt)}"
+        t = f"{user.gu}내의 전기차량 등록수 : {len(self.res_car_df)}"
         return t, self.gu_res_car_cnt
