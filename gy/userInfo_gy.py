@@ -1,7 +1,7 @@
 from geopy.geocoders import Nominatim
 
 # 유저 정보 입력 클래스
-class UserInfo :
+class UserInfo:
 
     def __init__(self, address, crd):
         self.address = address

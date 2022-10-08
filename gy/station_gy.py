@@ -64,8 +64,8 @@ class Station_gy:
         # 떨어진 거리의 새로운 열 만들기
         for k in [3,5,7]:
             for i in range(len(self.seoul_loc_df)):
-                self.seoul_loc_df.loc[i,'distant distance(km)']=self.cal_dis(user_loc,(self.seoul_loc_df.iloc[i,1],self.seoul_loc_df.iloc[i,2]))
-            result_df=self.seoul_loc_df[self.seoul_loc_df['distant distance(km)']<=k]
+                self.seoul_loc_df.loc[i,'dis(km)']=self.cal_dis(user_loc,(self.seoul_loc_df.iloc[i,1],self.seoul_loc_df.iloc[i,2]))
+            result_df=self.seoul_loc_df[self.seoul_loc_df['dis(km)']<=k]
 
             if len(result_df)==0:
                 print(f"주변 {k}km내에 있는 충전소가 없습니다.")
@@ -75,26 +75,6 @@ class Station_gy:
                 print(f"다른곳으로 이동 후 다시 정보를 입력해주세요.")
             else:
                 break
-
-
-        # if len(result_df)==0:
-        #     print(f"주변 5km내에 있는 충전소가 없습니다.")
-        #     for i in range(len(self.seoul_loc_df)):
-        #         self.seoul_loc_df.loc[i,'distant distance(km)']=self.cal_dis(user_loc,(self.seoul_loc_df.iloc[i,1],self.seoul_loc_df.iloc[i,2]))
-        #     result_df=self.seoul_loc_df[self.seoul_loc_df['distant distance(km)']<=5.0]
-        # else:
-        #     print(f"주변 3km내에 있는 충전소를 보여줍니다.")
-
-        # if len(result_df)==0:
-        #     print(f"주변 5km내에 있는 충전소가 없습니다.")
-        #     for i in range(len(self.seoul_loc_df)):
-        #         self.seoul_loc_df.loc[i,'distant distance(km)']=self.cal_dis(user_loc,(self.seoul_loc_df.iloc[i,1],self.seoul_loc_df.iloc[i,2]))
-        #     result_df=self.seoul_loc_df[self.seoul_loc_df['distant distance(km)']<=7.0]
-        # else:
-        #     print(f"주변 3km내에 있는 충전소를 보여줍니다.")
-        
-        # if len(result_df)==0:
-        #     print(f"주변 7km내에 있는 충전소를 보여줍니다.")
         
         # 주소데이터를 열로 만들기
         result_df=pd.merge(result_df,self.charge_address_df,how='inner')
@@ -106,8 +86,26 @@ class Station_gy:
             else:
                 result_df.loc[i,'speed']=self.speed_df.loc[i,'speed']
         
-        result_df=result_df.sort_values('distant distance(km)',ascending=False)
+        result_df=result_df.sort_values('dis(km)')
         return result_df
+
+    # 기능: 서울시 구별 등록차량 개수
+    # 입력: 사용자 위치 정보
+    # 출력: 해당 구의 등록된 차량 개수
+    def res_car_cnt(self,address):
+        gu=address.split(' ')[1]
+        res_car_df=self.car_register_df.iloc[[self.car_register_df.ind[i]-1 for i in range(len(self.car_register_df)) if self.car_register_df.loc[i,'dong'].split(' ')[1]==gu],]
+
+        return res_car_df
+
+    # 기능: 서울시 구별 등록차량 개수 (차량 종류별)
+    # 입력: 해당 구의 데프
+    # 출력: 차량 종류별
+    def gu_res_car_cnt(self,re_car_data):
+        gu_res_car_df=pd.DataFrame(re_car_data.groupby('fuel').count()['dong'].reset_index()).sort_values('dong',ascending=False)
+        gu_res_car_df.columns=['fuel','cnt']
+        
+        return gu_res_car_df
 
     # 기능: 사용자 위치에서 각 충전소까지 거리 데이터에 추가
     # 입력: user_loc
