@@ -31,7 +31,7 @@ st.dataframe(gu_res_car_cnt)
 
 service.make_station_df((float(user.loc['lat']),float(user.loc['lng'])))
 df = service.result_df
-df.rename(columns = {'LAT':'lat', 'LNG':'lon'}, inplace = True)
+
 # st.map(df[['lat', 'lon']])
 
 st.pydeck_chart(pdk.Deck(
@@ -56,7 +56,7 @@ st.pydeck_chart(pdk.Deck(
         ),       
         pdk.Layer(
             'ScatterplotLayer',
-            data=service.get_closest_st().rename(columns = {'LAT':'lat', 'LNG':'lon'}),
+            data=service.get_closest_st(),
             get_position='[lon, lat]',
             get_color='[150, 30, 30, 160]',
             get_radius=25,
@@ -70,5 +70,5 @@ st.pydeck_chart(pdk.Deck(
         ),
     ],
 ))
-st.text(f'{service.length}km내 충전소 수 : {len(df)}')
+st.text(f'{service.length}km 내의 충전소 수 : {len(df)} 개')
 st_df = st.dataframe(df,width=800,height=400)
